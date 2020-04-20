@@ -14,7 +14,7 @@
         {
             foreach ($parameters as $key => $value) 
             {
-                $this->setParam($key, $value);
+                $this->setParam($statement, $key, $value);
             }
         }
 
@@ -27,7 +27,7 @@
         {
             $stmt = $this->conn->prepare($rawQuery);
 
-            $this->setParams($rawQuery, $params);
+            $this->setParams($stmt, $params);
 
             $stmt->execute(); 
 
