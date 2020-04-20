@@ -25,10 +25,22 @@
 //$aluno->insert();
 //echo $aluno;
 
-//
-$usuario = new Usuario();
+//Editando pelo comando Update
+/*$usuario = new Usuario();
 $usuario->loadById(8);
 
 $usuario->update("Dgo","789456");
+echo $usuario;*/
+
+
+$usuario = new Usuario();
+
+$usuario->loadById(8);
+
+$usuario->delete();
+
+
+
+
 echo $usuario;
 ?>
