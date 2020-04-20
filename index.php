@@ -18,13 +18,17 @@
 //carrega um usuario usando o login e a senha
 //$usuario = new Usuario();
 //$usuario->login("user","123456");
-
 //echo $usuario;
-   
-$aluno = new Usuario("Monster","M0N573R");
 
-$aluno->insert();
+//Criando um novo usuario
+//$aluno = new Usuario("Monster","M0N573R");
+//$aluno->insert();
+//echo $aluno;
 
-echo $aluno;
+//
+$usuario = new Usuario();
+$usuario->loadById(8);
 
+$usuario->update("Dgo","789456");
+echo $usuario;
 ?>
