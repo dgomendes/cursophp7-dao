@@ -53,14 +53,10 @@
             $result = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(":ID"=>$id));
 
             if (count($result) > 0) {
-                $row = $result[0];
+                
 
-                $this->setIdUsuario($row['idusuario']);
-                $this->setDesLogin($row['deslogin']);
-                $this->setDesSenha($row['dessenha']);
-                $this->setDtCadastro(new DateTime($row['dtcadastro']));
-
-
+                $this->setData($result[0]);
+                
             }
         }
 
@@ -79,6 +75,35 @@
                 ":SEARCH"=>"%".$login."%"));
         }
 
+        public function setData($data)
+        {
+            $this->setIdUsuario($data['idusuario']);
+            $this->setDesLogin($data['deslogin']);
+            $this->setDesSenha($data['dessenha']);
+            $this->setDtCadastro(new DateTime($data['dtcadastro']));
+        }
+
+        public function insert()
+        {
+            $sql = new Sql();
+
+            $results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+                ":LOGIN"=>$this->getDesLogin(),
+                ":PASSWORD"=>$this->getDesSenha()
+            ));
+
+            if(count($results) > 0)
+            {
+                $this->setData($results[0]);
+            }
+
+        }
+
+        public function __construct($login="", $password="")
+        {
+            $this->setDeslogin($login);
+            $this->setDessenha($password);
+        }
 
         public function __toString()
         {
@@ -86,7 +111,7 @@
                 "idusuario"=>$this->getIdUsuario(),
                 "deslogin"=>$this->getDesLogin(),
                 "dessenha"=>$this->getDesSenha(),
-                "dtcadastro"=>$this->getDtCadastro()->format("d/m/Y H:i:s")
+                "dtcadastro"=>$this->getDtCadastro()
                 
 
             ));
@@ -96,21 +121,23 @@
         {
 
             $sql = new Sql();
-            $result = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN and dessenha = :PASSWORD", array(
+            $results = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN and dessenha = :PASSWORD", array(
                 ":LOGIN"=>$login,
                 ":PASSWORD"=>$password
             ));
 
+            
+
             if (count($result) > 0) {
-                $row = $result[0];
+                
 
-                $this->setIdUsuario($row['idusuario']);
-                $this->setDesLogin($row['deslogin']);
-                $this->setDesSenha($row['dessenha']);
-                $this->setDtCadastro(new DateTime($row['dtcadastro']));
-
-
+                $this->setData($result[0]);
+               
             }
+            else {
+                throw new Exception("Login e/ou senha inválidos");
+            }
+
         }
     }
 ?>
