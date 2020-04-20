@@ -64,6 +64,22 @@
             }
         }
 
+        public static function getList()
+        {
+            $sql = new Sql();
+
+            return $sql->select("SELECT * FROM tb_usuarios ORDER BY deslogin;");
+        }
+
+        public static function search($login)
+        {
+            $sql = new Sql();
+
+            return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin",array(
+                ":SEARCH"=>"%".$login."%"));
+        }
+
+
         public function __toString()
         {
             return json_encode(array(
@@ -74,6 +90,27 @@
                 
 
             ));
+        }
+
+        public function login($login, $password)
+        {
+
+            $sql = new Sql();
+            $result = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN and dessenha = :PASSWORD", array(
+                ":LOGIN"=>$login,
+                ":PASSWORD"=>$password
+            ));
+
+            if (count($result) > 0) {
+                $row = $result[0];
+
+                $this->setIdUsuario($row['idusuario']);
+                $this->setDesLogin($row['deslogin']);
+                $this->setDesSenha($row['dessenha']);
+                $this->setDtCadastro(new DateTime($row['dtcadastro']));
+
+
+            }
         }
     }
 ?>
